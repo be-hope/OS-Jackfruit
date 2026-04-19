@@ -226,7 +226,7 @@ Caption: CLI commands sent to supervisor over IPC channel.
 
 ![Soft and Hard Limit](Screenshots/5_and_6_soft_and_hard_limit.png)
 
-Caption: Soft-limit warning followed by hard-limit kill and unregister cleanup.
+Caption: Soft-limit warning followed by hard-limit kill and unregister cleanup-please check the edited ss
 
 ---
 
