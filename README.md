@@ -182,13 +182,13 @@ screenshots/
 ### Screenshot A
 
 ```markdown id="img1"
-![Multi Container 1](screenshots/1_multicontainer_1.png)
+![Multi Container 1](Screenshots/1_multicontainer_1.png)
 ```
 
 ### Screenshot B
 
 ```markdown id="img2"
-![Multi Container 2](screenshots/1_multicontainer_2.png)
+![Multi Container 2](Screenshots/1_multicontainer_2.png)
 ```
 
 Caption: Two or more containers tracked under one supervisor.
@@ -198,7 +198,7 @@ Caption: Two or more containers tracked under one supervisor.
 ## 2. Metadata Tracking
 
 ```markdown id="img3"
-![PS Output](screenshots/2_ps_output.png)
+![PS Output](Screenshots/2_ps_output.png)
 ```
 
 Caption: `engine ps` displaying container IDs, PIDs, and lifecycle states.
@@ -208,7 +208,7 @@ Caption: `engine ps` displaying container IDs, PIDs, and lifecycle states.
 ## 3. Bounded-buffer Logging
 
 ```markdown id="img4"
-![Logging](screenshots/3_logging.png)
+![Logging](Screenshots/3_logging.png)
 ```
 
 Caption: Container stdout/stderr captured through producer-consumer logging pipeline.
@@ -220,13 +220,13 @@ Caption: Container stdout/stderr captured through producer-consumer logging pipe
 ### Screenshot A
 
 ```markdown id="img5"
-![CLI IPC 1](screenshots/4_cli_ipc_1.png)
+![CLI IPC 1](Screenshots/4_cli_ipc_1.png)
 ```
 
 ### Screenshot B
 
 ```markdown id="img6"
-![CLI IPC 2](screenshots/4_cli_ipc_2.png)
+![CLI IPC 2](Screenshots/4_cli_ipc_2.png)
 ```
 
 Caption: CLI command issued by client and handled by supervisor over IPC channel.
@@ -236,7 +236,7 @@ Caption: CLI command issued by client and handled by supervisor over IPC channel
 ## 5 & 6. Soft-limit Warning + Hard-limit Enforcement
 
 ```markdown id="img7"
-![Soft and Hard Limit](screenshots/5_and_6_soft_and_hard_limit.png)
+![Soft and Hard Limit](Screenshots/5_and_6_soft_and_hard_limit.png)
 ```
 
 Caption: Kernel module warning at soft limit, then hard-limit kill and unregister cleanup.
@@ -248,13 +248,13 @@ Caption: Kernel module warning at soft limit, then hard-limit kill and unregiste
 ### Screenshot A
 
 ```markdown id="img8"
-![Scheduling 1](screenshots/7_scheduling_1.png)
+![Scheduling 1](Screenshots/7_scheduling_1.png)
 ```
 
 ### Screenshot B
 
 ```markdown id="img9"
-![Scheduling 2](screenshots/7_scheduling_2.png)
+![Scheduling 2](Screenshots/7_scheduling_2.png)
 ```
 
 Caption: CPU-bound workload consuming high CPU share under scheduler.
@@ -264,7 +264,7 @@ Caption: CPU-bound workload consuming high CPU share under scheduler.
 ## 8. Clean Teardown
 
 ```markdown id="img10"
-![Teardown](screenshots/8_scheduling.png)
+![Teardown](Screenshots/8_scheduling.png)
 ```
 
 Caption: Containers terminated, reaped correctly, and runtime cleaned up.
