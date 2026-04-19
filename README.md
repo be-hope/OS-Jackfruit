@@ -4,24 +4,27 @@
 
 ## Team Members
 
-* Bhadra RS - SRN:PES1UG24CS111
-* Arundhathi K -SRN:PES1UG24CS082
+* Bhadra RS  — SRN: PES1UG24CS111
+* Arundhathi K — SRN: PES1UG24CS082
+
+
+
 
 ---
 
 # 2. Project Overview
 
-This project implements a lightweight Linux container runtime with:
+This project implements a lightweight Linux container runtime featuring:
 
-* Multi-container supervision using a long-running parent supervisor
-* Namespace-based isolation (PID, UTS, mount)
-* Separate writable root filesystems per container
-* CLI commands (`start`, `run`, `ps`, `logs`, `stop`)
+* Multi-container supervision
+* PID / UTS / mount namespace isolation
+* Separate writable root filesystems
+* CLI control commands (`start`, `run`, `ps`, `logs`, `stop`)
 * IPC between CLI and supervisor
-* Bounded-buffer concurrent logging pipeline
-* Linux kernel memory monitor module using `ioctl`
+* Bounded-buffer concurrent logging
+* Kernel memory monitor module
 * Soft-limit warning and hard-limit enforcement
-* Scheduling experiments using CPU-bound and I/O-bound workloads
+* Scheduling experiments
 
 ---
 
@@ -29,16 +32,16 @@ This project implements a lightweight Linux container runtime with:
 
 ## Environment
 
-* Ubuntu 22.04 / 24.04 VM
+* Ubuntu 22.04 / 24.04
 * GCC
 * make
 * Linux kernel headers
 
 ---
 
-## Step 1 — Build Project
+## Step 1 — Build
 
-```bash id="b1"
+```bash
 cd ~/OS-Jackfruit/boilerplate
 make
 ```
@@ -55,13 +58,13 @@ Builds:
 
 ## Step 2 — Load Kernel Module
 
-```bash id="b2"
+```bash
 sudo insmod monitor.ko
 ```
 
 Verify:
 
-```bash id="b3"
+```bash
 lsmod | grep monitor
 ls -l /dev/container_monitor
 ```
@@ -70,23 +73,21 @@ ls -l /dev/container_monitor
 
 ## Step 3 — Start Supervisor
 
-```bash id="b4"
+```bash
 sudo ./engine supervisor ./rootfs-base
 ```
 
 Expected:
 
-```text id="b5"
+```text
 Supervisor running...
 ```
-
-Leave this terminal open.
 
 ---
 
 ## Step 4 — Create Writable Rootfs Copies
 
-```bash id="b6"
+```bash
 cp -a rootfs-base rootfs-alpha
 cp -a rootfs-base rootfs-beta
 ```
@@ -95,7 +96,7 @@ cp -a rootfs-base rootfs-beta
 
 ## Step 5 — Copy Workloads
 
-```bash id="b7"
+```bash
 cp cpu_hog rootfs-alpha/
 cp cpu_hog rootfs-beta/
 cp io_pulse rootfs-beta/
@@ -108,16 +109,16 @@ cp memory_hog rootfs-alpha/
 
 Open second terminal:
 
-```bash id="b8"
+```bash
 sudo ./engine start alpha ./rootfs-alpha /cpu_hog --soft-mib 48 --hard-mib 80
 sudo ./engine start beta ./rootfs-beta /cpu_hog --soft-mib 64 --hard-mib 96
 ```
 
 ---
 
-## Step 7 — List Metadata
+## Step 7 — View Metadata
 
-```bash id="b9"
+```bash
 sudo ./engine ps
 ```
 
@@ -125,24 +126,24 @@ sudo ./engine ps
 
 ## Step 8 — View Logs
 
-```bash id="b10"
+```bash
 sudo ./engine logs alpha
 ```
 
 ---
 
-## Step 9 — Memory Test
+## Step 9 — Memory Limit Test
 
-```bash id="b11"
+```bash
 sudo ./engine start mem1 ./rootfs-alpha /memory_hog
 sudo dmesg | grep container_monitor
 ```
 
 ---
 
-## Step 10 — Scheduling Test
+## Step 10 — Scheduling Experiment
 
-```bash id="b12"
+```bash
 sudo ./engine start cpu1 ./rootfs-alpha /cpu_hog --nice 0
 sudo ./engine start cpu2 ./rootfs-beta /cpu_hog --nice 10
 top
@@ -152,7 +153,7 @@ top
 
 ## Step 11 — Stop Containers
 
-```bash id="b13"
+```bash
 sudo ./engine stop alpha
 sudo ./engine stop beta
 ```
@@ -161,7 +162,7 @@ sudo ./engine stop beta
 
 ## Step 12 — Unload Module
 
-```bash id="b14"
+```bash
 sudo rmmod monitor
 ```
 
@@ -171,8 +172,8 @@ sudo rmmod monitor
 
 All screenshots are stored inside:
 
-```text id="img0"
-screenshots/
+```text
+Screenshots/
 ```
 
 ---
@@ -181,35 +182,27 @@ screenshots/
 
 ### Screenshot A
 
-```markdown id="img1"
 ![Multi Container 1](Screenshots/1_multicontainer_1.png)
-```
 
 ### Screenshot B
 
-```markdown id="img2"
 ![Multi Container 2](Screenshots/1_multicontainer_2.png)
-```
 
-Caption: Two or more containers tracked under one supervisor.
+Caption: Two or more containers managed under one supervisor process.
 
 ---
 
 ## 2. Metadata Tracking
 
-```markdown id="img3"
 ![PS Output](Screenshots/2_ps_output.png)
-```
 
-Caption: `engine ps` displaying container IDs, PIDs, and lifecycle states.
+Caption: `engine ps` showing container IDs, PIDs, and states.
 
 ---
 
 ## 3. Bounded-buffer Logging
 
-```markdown id="img4"
 ![Logging](Screenshots/3_logging.png)
-```
 
 Caption: Container stdout/stderr captured through producer-consumer logging pipeline.
 
@@ -219,27 +212,21 @@ Caption: Container stdout/stderr captured through producer-consumer logging pipe
 
 ### Screenshot A
 
-```markdown id="img5"
 ![CLI IPC 1](Screenshots/4_cli_ipc_1.png)
-```
 
 ### Screenshot B
 
-```markdown id="img6"
 ![CLI IPC 2](Screenshots/4_cli_ipc_2.png)
-```
 
-Caption: CLI command issued by client and handled by supervisor over IPC channel.
+Caption: CLI commands sent to supervisor over IPC channel.
 
 ---
 
 ## 5 & 6. Soft-limit Warning + Hard-limit Enforcement
 
-```markdown id="img7"
 ![Soft and Hard Limit](Screenshots/5_and_6_soft_and_hard_limit.png)
-```
 
-Caption: Kernel module warning at soft limit, then hard-limit kill and unregister cleanup.
+Caption: Soft-limit warning followed by hard-limit kill and unregister cleanup.
 
 ---
 
@@ -247,56 +234,50 @@ Caption: Kernel module warning at soft limit, then hard-limit kill and unregiste
 
 ### Screenshot A
 
-```markdown id="img8"
 ![Scheduling 1](Screenshots/7_scheduling_1.png)
-```
 
 ### Screenshot B
 
-```markdown id="img9"
 ![Scheduling 2](Screenshots/7_scheduling_2.png)
-```
 
-Caption: CPU-bound workload consuming high CPU share under scheduler.
+Caption: CPU-bound workload consuming high CPU share under Linux scheduler.
 
 ---
 
 ## 8. Clean Teardown
 
-```markdown id="img10"
 ![Teardown](Screenshots/8_scheduling.png)
-```
 
-Caption: Containers terminated, reaped correctly, and runtime cleaned up.
+Caption: Containers stopped, reaped correctly, and runtime cleaned up.
 
 ---
 
 # 5. Engineering Analysis
 
-## A. Why Namespace Isolation Is Used
+## A. Process Isolation
 
-Linux namespaces provide separate views of process IDs, hostnames, and mount points. This makes each container appear independent while sharing the same kernel.
+Linux namespaces isolate PID space, hostname, and mount tree so each container appears independent while sharing the host kernel.
 
-## B. Why a Supervisor Process Is Needed
+## B. Supervisor Design
 
-A persistent supervisor tracks containers, handles user commands, reaps exited children, and maintains metadata safely.
+A persistent parent supervisor tracks container metadata, handles commands, and reaps exited children using SIGCHLD.
 
-## C. Why Two IPC Paths Were Used
+## C. IPC Model
 
-Two communication channels separate concerns:
+Two IPC paths were used:
 
 * Control path: CLI ↔ Supervisor
-* Logging path: Pipes from containers to logger threads
+* Logging path: Pipes → bounded buffer → log writer
 
-This avoids mixing control traffic with data traffic.
+This avoids interference between command traffic and logging traffic.
 
-## D. Why Memory Enforcement Is in Kernel Space
+## D. Memory Enforcement
 
-The kernel can directly inspect task memory usage and send signals reliably. User-space polling would be weaker and slower.
+The kernel module reads process RSS memory. Soft-limit crossings generate warnings; hard-limit crossings terminate the container.
 
-## E. Why Scheduling Experiments Matter
+## E. Scheduling Behavior
 
-They demonstrate how Linux allocates CPU time fairly while respecting priorities and keeping interactive tasks responsive.
+Linux CFS aims for fairness while still responding to priority hints (`nice`) and interactive sleeping tasks.
 
 ---
 
@@ -306,9 +287,9 @@ They demonstrate how Linux allocates CPU time fairly while respecting priorities
 
 Choice: `clone()` with namespaces
 
-Tradeoff: More complex setup than plain `fork()`
+Tradeoff: More setup complexity
 
-Reason: Provides realistic container isolation.
+Reason: Realistic container isolation.
 
 ---
 
@@ -318,17 +299,17 @@ Choice: Long-running daemon
 
 Tradeoff: Requires IPC and cleanup logic
 
-Reason: Enables multi-container lifecycle management.
+Reason: Supports multiple simultaneous containers.
 
 ---
 
 ## Logging Pipeline
 
-Choice: Bounded buffer + producer/consumer threads
+Choice: Producer-consumer bounded buffer
 
 Tradeoff: Synchronization complexity
 
-Reason: Prevents blocking and supports concurrency.
+Reason: Prevents blocking and supports concurrent logging.
 
 ---
 
@@ -336,9 +317,9 @@ Reason: Prevents blocking and supports concurrency.
 
 Choice: Character device + `ioctl`
 
-Tradeoff: Kernel module debugging is harder
+Tradeoff: Kernel debugging complexity
 
-Reason: Clean registration and policy enforcement.
+Reason: Clean container registration and policy enforcement.
 
 ---
 
@@ -346,41 +327,39 @@ Reason: Clean registration and policy enforcement.
 
 Choice: Synthetic workloads (`cpu_hog`, `io_pulse`)
 
-Tradeoff: Simpler than real applications
+Tradeoff: Less realistic than production apps
 
-Reason: Produces clear measurable scheduler behavior.
+Reason: Clear and measurable behavior.
 
 ---
 
 # 7. Scheduler Experiment Results
 
-## Raw Measurements
-
-| Workload | Nice | CPU Usage    |
-| -------- | ---- | ------------ |
-| cpu1     | 0    | ~99%         |
-| cpu2     | 10   | lower        |
-| io1      | 0    | intermittent |
+| Workload | Nice Value | Observed CPU          |
+| -------- | ---------- | --------------------- |
+| cpu1     | 0          | ~99%                  |
+| cpu2     | 10         | Lower share           |
+| io1      | 0          | Bursty / intermittent |
 
 ## Observations
 
-* CPU-bound tasks remain runnable and consume sustained CPU.
-* Lower nice values receive better scheduling preference.
-* I/O-bound tasks sleep often and wake quickly.
+* CPU-bound workloads consume sustained CPU time.
+* Lower nice values receive more favorable scheduling.
+* I/O-bound tasks sleep frequently and remain responsive.
 
 ## Conclusion
 
-Linux CFS balances fairness, responsiveness, and priority hints.
+Linux CFS balances fairness, responsiveness, and priority hints effectively.
 
 ---
 
 # 8. Cleanup Procedure
 
-```bash id="c1"
+```bash
 sudo ./engine stop alpha
 sudo ./engine stop beta
-sudo rmmod monitor
 ps aux | grep engine
+sudo rmmod monitor
 ```
 
 No zombie container processes remain after shutdown.
@@ -389,10 +368,10 @@ No zombie container processes remain after shutdown.
 
 # 9. Repository Structure
 
-```text id="tree1"
+```text
 OS-Jackfruit/
 ├── README.md
-├── screenshots/
+├── Screenshots/
 ├── boilerplate/
 │   ├── engine.c
 │   ├── monitor.c
@@ -406,6 +385,6 @@ OS-Jackfruit/
 # 10. Final Checklist
 
 * [ ] Replace SRNs
-* [ ] Verify screenshots render
-* [ ] Verify commands work on fresh VM
+* [ ] Verify screenshot rendering
+* [ ] Verify commands on fresh VM
 * [ ] Push final commit
